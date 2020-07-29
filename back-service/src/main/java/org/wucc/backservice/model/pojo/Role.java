@@ -1,6 +1,8 @@
 package org.wucc.backservice.model.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.wucc.backservice.model.ERole;
 
 import javax.persistence.*;
@@ -15,18 +17,17 @@ import java.util.Set;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole name;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
 
     public Role(ERole name){
         this.name = name;
