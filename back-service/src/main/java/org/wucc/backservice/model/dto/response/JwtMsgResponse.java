@@ -18,13 +18,20 @@ public class JwtMsgResponse {
     private long id;
     private String username;
     private String email;
+    private String firstName;
+    private String lastName;
+    private int gender;
     private List<String> roles;
 
-    public JwtMsgResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+    public JwtMsgResponse(String accessToken, Long id, String username, String email,
+                          String firstName, String lastName, int gender, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
     }
 }

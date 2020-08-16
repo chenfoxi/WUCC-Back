@@ -26,4 +26,6 @@ public class SignupRequest {
     private int gender;
 
     private Set<String> role;
+
+    private String description;
 }

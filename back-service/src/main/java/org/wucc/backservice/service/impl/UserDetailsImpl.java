@@ -8,7 +8,6 @@ import org.wucc.backservice.model.pojo.LocalAuth;
 import org.wucc.backservice.model.pojo.User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,18 +30,28 @@ public class UserDetailsImpl implements UserDetails {
 
     private int status;
 
+    private String firstName;
+
+    private String lastName;
+
+    private int gender;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password, int status,
+    public UserDetailsImpl(Long id, String username, String email, String password, int status, String firstName,
+                           String lastName, int gender,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.status = status;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
         this.authorities = authorities;
     }
 
@@ -57,6 +66,9 @@ public class UserDetailsImpl implements UserDetails {
             user.getEmail(),
             localAuth.getPassword(),
             user.getStatus(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getGender(),
             authorities
         );
     }
@@ -111,5 +123,17 @@ public class UserDetailsImpl implements UserDetails {
         }
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getGender() {
+        return gender;
     }
 }
