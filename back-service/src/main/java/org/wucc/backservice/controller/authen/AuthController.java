@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.wucc.backservice.model.ERole;
 import org.wucc.backservice.model.dto.request.LoginRequest;
-import org.wucc.backservice.model.dto.request.SignupRequest;
+import org.wucc.backservice.model.dto.request.SignUpRequest;
 import org.wucc.backservice.model.dto.response.JwtMsgResponse;
 import org.wucc.backservice.model.dto.response.MessageResponse;
 import org.wucc.backservice.model.pojo.LocalAuth;
@@ -82,7 +82,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (localAuthRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                 .badRequest()

@@ -3,11 +3,17 @@ package org.wucc.backservice.model.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.NaturalIdCache;
+import org.wucc.backservice.model.pojo.relationship.OnceEventRegister;
+import org.wucc.backservice.model.pojo.relationship.RegularEventRegister;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -20,6 +26,10 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@NaturalIdCache
+@Cache(
+    usage = CacheConcurrencyStrategy.READ_WRITE
+)
 public class User {
 
     @Id
@@ -30,6 +40,7 @@ public class User {
 
     private String lastName;
 
+    @NaturalId
     private String email;
 
     private int gender;
@@ -64,4 +75,33 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<RegularEventRegister> regularEvents = new HashSet<>();
+
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private Set<OnceEventRegister> onceEvents = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
 }

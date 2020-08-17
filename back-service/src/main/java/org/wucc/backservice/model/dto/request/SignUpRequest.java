@@ -11,7 +11,7 @@ import java.util.Set;
  */
 
 @Data
-public class SignupRequest {
+public class SignUpRequest {
 
     private String username;
 
