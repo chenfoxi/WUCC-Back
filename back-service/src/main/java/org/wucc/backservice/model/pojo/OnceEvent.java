@@ -39,9 +39,7 @@ public class OnceEvent extends AbstractEntity {
         mappedBy = "onceEvent", orphanRemoval = true)
     private Set<OnceEventPhoto> photos = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "event_meta_id")
+    @OneToOne
     private EventMetaData metaDataForO;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,

@@ -33,17 +33,14 @@ public class EventMetaData extends AbstractEntity {
     @OneToOne
     private Photo photo;
 
-    private int type;
+    // validStatus 0=valid -1=invalid
+    // priority 1-5 low to high
+    private int type, validStatus, priority;
 
     private Timestamp updateTime, createTime;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
         mappedBy = "metaDataForR", orphanRemoval = true)
     private Set<RegularEvent> regularEventSet = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-        mappedBy = "metaDataForO", orphanRemoval = true)
-    private Set<OnceEvent> EventSet = new HashSet<>();
-
 
 }
