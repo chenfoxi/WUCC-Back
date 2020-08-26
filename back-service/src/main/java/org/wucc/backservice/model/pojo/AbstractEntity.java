@@ -1,12 +1,15 @@
 package org.wucc.backservice.model.pojo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 /**
  * Created by foxi.chen on 17/08/20.
@@ -17,7 +20,9 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @EqualsAndHashCode
 @Data
-public class AbstractEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

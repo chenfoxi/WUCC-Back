@@ -22,11 +22,13 @@ public class OnceEventDTO extends SimpleDTO implements Serializable {
 
     private String description;
 
-    private String photoUrl;
+    private String url;
 
     private String street, suburb, city;
 
     private Timestamp startTime, endTime;
 
     private int status;
+
+    private String content;
 }

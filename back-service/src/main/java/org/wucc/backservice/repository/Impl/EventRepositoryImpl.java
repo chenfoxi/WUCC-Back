@@ -6,13 +6,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.wucc.backservice.model.dto.OnceEventDTO;
+import org.wucc.backservice.model.dto.RegularEventDTO;
 import org.wucc.backservice.model.dto.SimpleDTO;
 import org.wucc.backservice.repository.CustomEventRepository;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by foxi.chen on 18/08/20.
@@ -35,6 +35,51 @@ public class EventRepositoryImpl implements CustomEventRepository {
         "ORDER BY priority DESC , a. STATUS ASC , :orderTerm DESC " +
         "LIMIT :number";
 
+    static final String FIND_ONCE_EVENT_DETAIL_ORDER_BY = "SELECT oe.id AS id , emd.title AS title , " +
+        "emd.description AS description , p.url , emd.street , emd.suburb , emd.city , oe.start_time , " +
+        "oe.end_time , oe.`status` " +
+        "FROM event_meta_data emd INNER JOIN once_event oe ON emd.id = oe.event_meta_id " +
+        "INNER JOIN photo p ON emd.photo_id = p.id " +
+        "WHERE emd.valid_status = 0 " +
+        "ORDER BY priority DESC , :orderTerm " +
+        "LIMIT :number";
+
+    static final String GET_ONCE_EVENT_BY_ID = "SELECT oe.id AS id , emd.title AS title , " +
+        "emd.description AS description , oe.content, p.url , emd.street , emd.suburb , " +
+        "emd.city , oe.start_time , oe.end_time , oe.`status` " +
+        "FROM event_meta_data emd " +
+        "INNER JOIN once_event oe ON emd.id = oe.event_meta_id " +
+        "INNER JOIN photo p ON emd.photo_id = p.id " +
+        "WHERE oe.id = :id";
+
+    static final String GET_R_EVENT_DETAILS_BY_MID_STATUS = "select emd.id as id, emd.title as title, re.id as rId, " +
+        "re.e_dayof_week as dayOfWeek, emd.description, re.content, emd.street, emd.suburb, emd.city, re.start_time, re.end_time, " +
+        "re.start_date, re.end_date, re.status, p.url as photoUrl " +
+        "from regular_event re inner join event_meta_data emd " +
+        "on re.event_meta_id = emd.id " +
+        "inner join photo p " +
+        "on emd.photo_id = p.id " +
+        "where emd.id = :id and re.status = :status " +
+        "order by re.start_date " +
+        "limit :start, :end";
+
+    static final String GET_PAGED_REVENTS_BY_MID_AND_STATUS = "select emd.title as title, re.id as rId, " +
+        "re.start_date, re.end_date " +
+        "from regular_event re inner join event_meta_data emd " +
+        "on re.event_meta_id = emd.id " +
+        "where emd.id = :id and re.status= :status " +
+        "order by re.start_date " +
+        "limit :start, :end";
+
+    static final String GET_R_EVENT_BY_ID = "select emd.id as id, emd.title as title, re.id as rId, " +
+        "re.e_dayof_week as dayOfWeek, emd.description, re.content, emd.street, emd.suburb, emd.city, re.start_time, re.end_time, " +
+        "re.start_date, re.end_date, re.status, p.url as photoUrl " +
+        "from regular_event re inner join event_meta_data emd " +
+        "on re.event_meta_id = emd.id " +
+        "inner join photo p " +
+        "on emd.photo_id = p.id " +
+        "where re.id = :id ";
+
     final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -44,7 +89,7 @@ public class EventRepositoryImpl implements CustomEventRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SimpleDTO> findRegularEventOrderBy(String orderTerm, Integer number, Integer type) {
+    public List<SimpleDTO> findEventOrderBy(String orderTerm, Integer number, Integer type) {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("orderTerm", orderTerm);
@@ -58,6 +103,64 @@ public class EventRepositoryImpl implements CustomEventRepository {
         return jdbcTemplate.query(FIND_REGULAR_EVENT_ORDER_BY,
             mapSqlParameterSource,
             new BeanPropertyRowMapper<>(SimpleDTO.class)
+        );
+    }
+
+    @Override
+    public List<OnceEventDTO> findOnceEventOrderBy(String orderTerm, Integer number) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("orderTerm", orderTerm);
+        mapSqlParameterSource.addValue("number", number);
+
+        return jdbcTemplate.query(FIND_ONCE_EVENT_DETAIL_ORDER_BY,
+            mapSqlParameterSource,
+            new BeanPropertyRowMapper<>(OnceEventDTO.class)
+        );
+    }
+
+    @Override
+    public OnceEventDTO getOnceEventDetailById(Long id) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", id);
+        return jdbcTemplate.queryForObject(GET_ONCE_EVENT_BY_ID,
+            mapSqlParameterSource,
+            new BeanPropertyRowMapper<>(OnceEventDTO.class)
+        );
+    }
+
+    @Override
+    public List<RegularEventDTO> getRegularEventsBymId(Long id, Integer start, Integer end, Integer status) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", id);
+        mapSqlParameterSource.addValue("status", status);
+        mapSqlParameterSource.addValue("start", start);
+        mapSqlParameterSource.addValue("end", end);
+        return jdbcTemplate.query(GET_R_EVENT_DETAILS_BY_MID_STATUS,
+            mapSqlParameterSource,
+            new BeanPropertyRowMapper<>(RegularEventDTO.class)
+        );
+    }
+
+    @Override
+    public List<RegularEventDTO> getPagedREventListBymIdAndStatus(Long id, Integer status,  Integer start, Integer end) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", id);
+        mapSqlParameterSource.addValue("start", start);
+        mapSqlParameterSource.addValue("end", end);
+        mapSqlParameterSource.addValue("status", status);
+        return jdbcTemplate.query(GET_PAGED_REVENTS_BY_MID_AND_STATUS,
+            mapSqlParameterSource,
+            new BeanPropertyRowMapper<>(RegularEventDTO.class)
+        );
+    }
+
+    @Override
+    public RegularEventDTO getRegularEventsById(Long id) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", id);
+        return jdbcTemplate.queryForObject(GET_R_EVENT_BY_ID,
+            mapSqlParameterSource,
+            new BeanPropertyRowMapper<>(RegularEventDTO.class)
         );
     }
 }

@@ -1,5 +1,6 @@
 package org.wucc.backservice.model.pojo.dict;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,10 +33,18 @@ public class Photo extends AbstractEntity {
     private String url;
     private Timestamp createTime, updateTime;
 
+    public Photo(Long id, String name, String url){
+        super(id);
+        this.name = name;
+        this.url = url;
+    }
+
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
         mappedBy = "photo", orphanRemoval = true)
     private Set<RegularEventPhoto> regularEvents = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
         mappedBy = "photo", orphanRemoval = true)
     private Set<OnceEventPhoto> onceEvents = new HashSet<>();
