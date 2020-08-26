@@ -1,5 +1,6 @@
 package org.wucc.backservice.model.pojo.relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,12 @@ public class RegularEventRegister{
     @EmbeddedId
     private RegularEventUserId regularEventUserId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("regularEventId")
     private RegularEvent regularEvent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     private User user;

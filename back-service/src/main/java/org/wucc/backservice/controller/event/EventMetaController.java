@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wucc.backservice.model.dto.RegularPageDTO;
+import org.wucc.backservice.model.dto.request.CheckRequest;
 import org.wucc.backservice.model.dto.request.SimpleRequest;
 import org.wucc.backservice.model.dto.response.CommonResponse;
+import org.wucc.backservice.model.pojo.composite.RegularEventUserId;
 import org.wucc.backservice.repository.PhotoRepository;
+import org.wucc.backservice.repository.RegularEventRegisterRepository;
 import org.wucc.backservice.service.EventService;
 
 import javax.validation.Valid;
@@ -28,10 +31,15 @@ public class EventMetaController {
 
     final PhotoRepository photoRepository;
 
+    final RegularEventRegisterRepository regularEventRegisterRepository;
+
     @Autowired
-    public EventMetaController (EventService eventService, PhotoRepository photoRepository) {
+    public EventMetaController(EventService eventService,
+                               PhotoRepository photoRepository,
+                               RegularEventRegisterRepository regularEventRegisterRepository) {
         this.eventService = eventService;
         this.photoRepository = photoRepository;
+        this.regularEventRegisterRepository = regularEventRegisterRepository;
     }
 
     @GetMapping("/listOrderBy/{type}")
@@ -74,5 +82,25 @@ public class EventMetaController {
         Integer start = simpleRequest.getStart();
         Integer end = simpleRequest.getEnd();
         return ResponseEntity.ok(eventService.getPagedrEventsByIdAndStatus(id, status, start, end));
+    }
+
+    @PostMapping("/checkReg")
+    public ResponseEntity<?> checkRegByRIdAndUId(@Valid @RequestBody CheckRequest checkRequest) {
+        Long rId = checkRequest.getEventId();
+        Long uId = checkRequest.getUId();
+        RegularEventUserId regularEventUserId = new RegularEventUserId(rId, uId);
+        CommonResponse<Boolean> commonResponse = new CommonResponse<>();
+        try{
+            Boolean ifAlreadyReg = regularEventRegisterRepository.findByRegularEventUserId(regularEventUserId).isPresent();
+            commonResponse.setData(ifAlreadyReg);
+            commonResponse.setCode(0);
+            commonResponse.setErrorMsg("");
+            return ResponseEntity.ok(commonResponse);
+        } catch (Exception ex){
+            commonResponse.setData(false);
+            commonResponse.setCode(-1);
+            commonResponse.setErrorMsg(ex.getMessage());
+            return ResponseEntity.status(500).body(commonResponse);
+        }
     }
 }

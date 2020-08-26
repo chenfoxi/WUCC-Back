@@ -1,12 +1,11 @@
 package org.wucc.backservice.model.pojo.relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wucc.backservice.model.pojo.RegularEvent;
-import org.wucc.backservice.model.pojo.User;
 import org.wucc.backservice.model.pojo.composite.RegularEventPhotoId;
-import org.wucc.backservice.model.pojo.composite.RegularEventUserId;
 import org.wucc.backservice.model.pojo.dict.Photo;
 
 import javax.persistence.*;
@@ -28,10 +27,12 @@ public class RegularEventPhoto {
     @EmbeddedId
     private RegularEventPhotoId regularEventPhotoId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("regularEventId")
     private RegularEvent regularEvent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("photoId")
     private Photo photo;

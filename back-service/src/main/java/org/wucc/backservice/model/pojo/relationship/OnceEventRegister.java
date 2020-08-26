@@ -1,15 +1,12 @@
 package org.wucc.backservice.model.pojo.relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.wucc.backservice.model.pojo.AbstractEntity;
 import org.wucc.backservice.model.pojo.OnceEvent;
-import org.wucc.backservice.model.pojo.RegularEvent;
 import org.wucc.backservice.model.pojo.User;
 import org.wucc.backservice.model.pojo.composite.OnceEventUserId;
-import org.wucc.backservice.model.pojo.composite.RegularEventUserId;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -29,10 +26,12 @@ public class OnceEventRegister{
     @EmbeddedId
     private OnceEventUserId onceEventUserId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("onceEventId")
     private OnceEvent onceEvent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     private User user;

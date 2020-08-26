@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.wucc.backservice.model.dto.OnceEventDTO;
+import org.wucc.backservice.model.dto.request.CheckRequest;
 import org.wucc.backservice.model.dto.request.SimpleRequest;
 import org.wucc.backservice.model.dto.response.CommonResponse;
+import org.wucc.backservice.model.pojo.composite.OnceEventUserId;
+import org.wucc.backservice.repository.OnceEventRegisterRepository;
 import org.wucc.backservice.repository.PhotoRepository;
 import org.wucc.backservice.service.EventService;
 
@@ -28,10 +31,15 @@ public class OnceEventController {
 
     final PhotoRepository photoRepository;
 
+    final OnceEventRegisterRepository onceEventRegisterRepository;
+
     @Autowired
-    public OnceEventController (EventService eventService, PhotoRepository photoRepository) {
+    public OnceEventController(EventService eventService,
+                               PhotoRepository photoRepository,
+                               OnceEventRegisterRepository onceEventRegisterRepository) {
         this.eventService = eventService;
         this.photoRepository = photoRepository;
+        this.onceEventRegisterRepository = onceEventRegisterRepository;
     }
 
     @PostMapping("/list")
@@ -74,4 +82,25 @@ public class OnceEventController {
         Long id = simpleRequest.getId();
         return ResponseEntity.ok(photoRepository.findPhotosByoId(id));
     }
+
+    @PostMapping("/checkReg")
+    public ResponseEntity<?> checkRegByOIdAndUId(@Valid @RequestBody CheckRequest checkRequest) {
+        Long oId = checkRequest.getEventId();
+        Long uId = checkRequest.getUId();
+        OnceEventUserId onceEventUserId = new OnceEventUserId(oId, uId);
+        CommonResponse<Boolean> commonResponse = new CommonResponse<>();
+        try {
+            Boolean ifAlreadyReg = onceEventRegisterRepository.findByOnceEventUserId(onceEventUserId).isPresent();
+            commonResponse.setData(ifAlreadyReg);
+            commonResponse.setCode(0);
+            commonResponse.setErrorMsg("");
+            return ResponseEntity.ok(commonResponse);
+        } catch (Exception ex) {
+            commonResponse.setData(false);
+            commonResponse.setCode(-1);
+            commonResponse.setErrorMsg(ex.getMessage());
+            return ResponseEntity.status(500).body(commonResponse);
+        }
+    }
+
 }

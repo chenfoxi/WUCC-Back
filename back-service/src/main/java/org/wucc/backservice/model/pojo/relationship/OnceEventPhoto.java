@@ -1,5 +1,6 @@
 package org.wucc.backservice.model.pojo.relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,12 @@ public class OnceEventPhoto {
     @EmbeddedId
     private OnceEventPhotoId onceEventPhotoId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("onceEventId")
     private OnceEvent onceEvent;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("photoId")
     private Photo photo;
