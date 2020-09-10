@@ -15,9 +15,9 @@ import java.util.List;
  */
 public interface EventService {
 
-    List<SimpleDTO> findEventOrderBy(String orderTerm, Integer number, Integer type);
+    List<SimpleDTO> findEventOrderBy(String orderTerm, Integer type);
 
-    List<OnceEventDTO> findOnceEvenOrderBy(String orderTerm, Integer number);
+    List<OnceEventDTO> findOnceEvenOrderBy(String orderTerm, Integer start, Integer end);
 
     OnceEventDTO getOnceEventById(Long id);
 
@@ -30,4 +30,8 @@ public interface EventService {
     List<RegularEventDTO> getPagedrEventsByIdAndStatus(Long id, Integer status, Integer start, Integer end);
 
     RegularPageDTO getRegularForPage(Long id);
+
+    Boolean checkRegisterByCompositeId(Long eventId, Long userId, Integer type);
+
+    Boolean joinEventByCompositeId(Long eventId, Long userId, Integer type);
 }

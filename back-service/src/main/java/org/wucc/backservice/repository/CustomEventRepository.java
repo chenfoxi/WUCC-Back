@@ -14,9 +14,9 @@ import java.util.List;
 
 public interface CustomEventRepository {
 
-    List<SimpleDTO> findEventOrderBy(String orderTerm, Integer number, Integer type);
+    List<SimpleDTO> findEventOrderBy(String orderTerm, Integer type);
 
-    List<OnceEventDTO> findOnceEventOrderBy(String orderTerm, Integer number);
+    List<OnceEventDTO> findOnceEventOrderBy(String orderTerm, Integer start, Integer end);
 
     OnceEventDTO getOnceEventDetailById(Long id);
 

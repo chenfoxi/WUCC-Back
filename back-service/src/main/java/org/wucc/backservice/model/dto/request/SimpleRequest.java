@@ -23,5 +23,6 @@ public class SimpleRequest {
 
     Integer status;
 
-    Integer count;
+    Integer type;
+
 }

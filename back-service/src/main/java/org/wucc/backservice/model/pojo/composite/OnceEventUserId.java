@@ -1,5 +1,6 @@
 package org.wucc.backservice.model.pojo.composite;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.Objects;
 @Data
 public class OnceEventUserId implements Serializable {
 
-    @Column(name = "o_event_id")
+    @Column(name = "once_event_id")
     private Long onceEventId;
 
     @Column(name = "user_id")

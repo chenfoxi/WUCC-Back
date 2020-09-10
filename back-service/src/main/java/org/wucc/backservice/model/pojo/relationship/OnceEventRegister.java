@@ -28,12 +28,12 @@ public class OnceEventRegister{
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("onceEventId")
+    @JoinColumn(name = "once_event_id", nullable = true, insertable = false, updatable = false)
     private OnceEvent onceEvent;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("userId")
+    @JoinColumn(name = "user_id", nullable = true, insertable = false, updatable = false)
     private User user;
 
     private Timestamp createTime;

@@ -26,14 +26,12 @@ public class EventRepositoryImpl implements CustomEventRepository {
     static final String FIND_REGULAR_EVENT_ORDER_BY = "SELECT id, title " +
         "FROM event_meta_data " +
         "where valid_status = 0 and type = 0 " +
-        "ORDER BY priority desc, :orderTerm DESC " +
-        "LIMIT :number";
+        "ORDER BY priority DESC, :orderTerm";
 
     static final String FIND_ONCE_EVENT_ORDER_BY = "SELECT a.id AS id , title FROM " +
         "once_event a INNER JOIN event_meta_data b ON a.event_meta_id = b.id " +
         "WHERE b.valid_status = 0 AND b.type = 1 " +
-        "ORDER BY priority DESC , a. STATUS ASC , :orderTerm DESC " +
-        "LIMIT :number";
+        "ORDER BY priority DESC, a. STATUS, :orderTerm";
 
     static final String FIND_ONCE_EVENT_DETAIL_ORDER_BY = "SELECT oe.id AS id , emd.title AS title , " +
         "emd.description AS description , p.url , emd.street , emd.suburb , emd.city , oe.start_time , " +
@@ -42,7 +40,7 @@ public class EventRepositoryImpl implements CustomEventRepository {
         "INNER JOIN photo p ON emd.photo_id = p.id " +
         "WHERE emd.valid_status = 0 " +
         "ORDER BY priority DESC , :orderTerm " +
-        "LIMIT :number";
+        "LIMIT :start, :end";
 
     static final String GET_ONCE_EVENT_BY_ID = "SELECT oe.id AS id , emd.title AS title , " +
         "emd.description AS description , oe.content, p.url , emd.street , emd.suburb , " +
@@ -89,11 +87,10 @@ public class EventRepositoryImpl implements CustomEventRepository {
 
     @Transactional(readOnly = true)
     @Override
-    public List<SimpleDTO> findEventOrderBy(String orderTerm, Integer number, Integer type) {
+    public List<SimpleDTO> findEventOrderBy(String orderTerm, Integer type) {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("orderTerm", orderTerm);
-        mapSqlParameterSource.addValue("number", number);
         if (type == 1) {
             return jdbcTemplate.query(FIND_ONCE_EVENT_ORDER_BY,
                 mapSqlParameterSource,
@@ -107,10 +104,11 @@ public class EventRepositoryImpl implements CustomEventRepository {
     }
 
     @Override
-    public List<OnceEventDTO> findOnceEventOrderBy(String orderTerm, Integer number) {
+    public List<OnceEventDTO> findOnceEventOrderBy(String orderTerm, Integer start, Integer end) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("orderTerm", orderTerm);
-        mapSqlParameterSource.addValue("number", number);
+        mapSqlParameterSource.addValue("start", start);
+        mapSqlParameterSource.addValue("end", end);
 
         return jdbcTemplate.query(FIND_ONCE_EVENT_DETAIL_ORDER_BY,
             mapSqlParameterSource,

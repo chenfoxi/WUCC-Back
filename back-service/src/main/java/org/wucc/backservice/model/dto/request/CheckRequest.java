@@ -14,4 +14,6 @@ public class CheckRequest {
     private Long eventId;
 
     private Long uId;
+
+    private Integer type;
 }
