@@ -21,7 +21,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class RegularEventPhotoId implements Serializable {
 
-    @Column(name = "r_event_id")
+    @Column(name = "regular_event_id")
     private Long regularEventId;
 
     @Column(name = "photo_id")

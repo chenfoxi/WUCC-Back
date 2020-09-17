@@ -25,4 +25,6 @@ public class SimpleRequest {
 
     Integer type;
 
+    String orderTerm;
+
 }

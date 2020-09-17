@@ -29,12 +29,12 @@ public class RegularEventPhoto {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("regularEventId")
+    @JoinColumn(name = "regular_event_id", nullable = true, insertable = false, updatable = false)
     private RegularEvent regularEvent;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("photoId")
+    @JoinColumn(name = "photo_id", nullable = true, insertable = false, updatable = false)
     private Photo photo;
 
     private Timestamp createTime;

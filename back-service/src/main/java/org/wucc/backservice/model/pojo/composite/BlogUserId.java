@@ -10,22 +10,20 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by foxi.chen on 17/08/20.
+ * Created by foxi.chen on 17/09/20.
  *
  * @author foxi.chen
  */
-
 @Embeddable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OnceEventPhotoId implements Serializable {
+public class BlogUserId implements Serializable {
+    @Column(name = "blog_id")
+    private Long blogId;
 
-    @Column(name = "once_event_id")
-    private Long onceEventId;
-
-    @Column(name = "photo_id")
-    private Long photoId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Override
     public boolean equals(Object object) {
@@ -34,13 +32,14 @@ public class OnceEventPhotoId implements Serializable {
         if (object == null || getClass() != object.getClass())
             return false;
 
-        OnceEventPhotoId that = (OnceEventPhotoId) object;
-        return Objects.equals(onceEventId, that.onceEventId) &&
-            Objects.equals(photoId, that.photoId);
+        BlogUserId that = (BlogUserId) object;
+        return Objects.equals(blogId, that.blogId) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(onceEventId, photoId);
+        return Objects.hash(blogId, userId);
     }
+
 }

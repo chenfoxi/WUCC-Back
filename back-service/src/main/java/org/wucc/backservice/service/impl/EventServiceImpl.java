@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<RegularEventDTO> findPagedRegularEventDTOBymId(Long id, Integer start, Integer end) {
-        return customEventRepository.getRegularEventsBymId(id, start, end, 0);
+        return customEventRepository.getRegularEventsBymId(id, start, end, 0, "start_date");
     }
 
     @Override
@@ -91,14 +91,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<RegularEventDTO> getPagedrEventsByIdAndStatus(Long id, Integer status, Integer start, Integer end) {
-        return customEventRepository.getPagedREventListBymIdAndStatus(id, status, start, end);
+    public List<RegularEventDTO> getPagedrEventsByIdAndStatus(Long id, Integer status,
+                                                              Integer start, Integer end, String orderTerm) {
+        return customEventRepository.getPagedREventListBymIdAndStatus(id, status, start, end, orderTerm);
     }
 
     @Override
     public RegularPageDTO getRegularForPage(Long id) {
-        RegularEventDTO general = customEventRepository.getRegularEventsBymId(id, 0, 1, 0).get(0);
-        RegularEventDTO last = customEventRepository.getRegularEventsBymId(id, 0, 1, 2).get(0);
+        RegularEventDTO general = customEventRepository.getRegularEventsBymId(id, 0, 1, 0, "start_date").get(0);
+        RegularEventDTO last = customEventRepository.getRegularEventsBymId(id, 0, 1, 2, "start_date desc").get(0);
         RegularPageDTO pageDTO = new RegularPageDTO();
         pageDTO.setGeneral(general);
         pageDTO.setLastFinishedEvent(last);
@@ -149,5 +150,10 @@ public class EventServiceImpl implements EventService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Integer getCountOfRegularEvent(Long mId, Integer status) {
+        return customEventRepository.getCountOfREventBymId(mId, status);
     }
 }

@@ -27,11 +27,14 @@ public interface EventService {
 
     RegularEventDTO getRegularEventById(Long id);
 
-    List<RegularEventDTO> getPagedrEventsByIdAndStatus(Long id, Integer status, Integer start, Integer end);
+    List<RegularEventDTO> getPagedrEventsByIdAndStatus(Long id, Integer status, Integer start,
+                                                       Integer end, String orderTerm);
 
     RegularPageDTO getRegularForPage(Long id);
 
     Boolean checkRegisterByCompositeId(Long eventId, Long userId, Integer type);
 
     Boolean joinEventByCompositeId(Long eventId, Long userId, Integer type);
+
+    Integer getCountOfRegularEvent(Long mId, Integer status);
 }

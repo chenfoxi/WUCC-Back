@@ -20,10 +20,12 @@ public interface CustomEventRepository {
 
     OnceEventDTO getOnceEventDetailById(Long id);
 
-    List<RegularEventDTO> getRegularEventsBymId(Long id, Integer start, Integer end, Integer status);
+    List<RegularEventDTO> getRegularEventsBymId(Long id, Integer start, Integer end, Integer status, String orderTerm);
 
     RegularEventDTO getRegularEventsById(Long id);
 
-    List<RegularEventDTO> getPagedREventListBymIdAndStatus(Long id, Integer status,  Integer start, Integer end);
+    List<RegularEventDTO> getPagedREventListBymIdAndStatus(Long id, Integer status,  Integer start,
+                                                           Integer end, String orderTerm);
 
+    Integer getCountOfREventBymId(Long mId, Integer status);
 }

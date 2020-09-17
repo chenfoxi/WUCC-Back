@@ -22,7 +22,7 @@ import java.util.Objects;
 @Data
 public class RegularEventUserId implements Serializable {
 
-    @Column(name = "r_event_id")
+    @Column(name = "regular_event_id")
     private Long regularEventId;
 
     @Column(name = "user_id")

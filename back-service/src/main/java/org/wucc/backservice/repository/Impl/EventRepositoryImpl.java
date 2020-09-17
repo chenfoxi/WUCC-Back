@@ -12,6 +12,7 @@ import org.wucc.backservice.model.dto.SimpleDTO;
 import org.wucc.backservice.repository.CustomEventRepository;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class EventRepositoryImpl implements CustomEventRepository {
         "inner join photo p " +
         "on emd.photo_id = p.id " +
         "where emd.id = :id and re.status = :status " +
-        "order by re.start_date " +
+        "order by :orderTerm " +
         "limit :start, :end";
 
     static final String GET_PAGED_REVENTS_BY_MID_AND_STATUS = "select emd.title as title, re.id as rId, " +
@@ -66,7 +67,7 @@ public class EventRepositoryImpl implements CustomEventRepository {
         "from regular_event re inner join event_meta_data emd " +
         "on re.event_meta_id = emd.id " +
         "where emd.id = :id and re.status= :status " +
-        "order by re.start_date " +
+        "order by :orderTerm " +
         "limit :start, :end";
 
     static final String GET_R_EVENT_BY_ID = "select emd.id as id, emd.title as title, re.id as rId, " +
@@ -77,6 +78,11 @@ public class EventRepositoryImpl implements CustomEventRepository {
         "inner join photo p " +
         "on emd.photo_id = p.id " +
         "where re.id = :id ";
+
+    static final String GET_COUNT_R_EVENT_BY_MID_STATUS = "select count(*) as number from " +
+        "regular_event re inner join event_meta_data emd " +
+        "on re.event_meta_id = emd.id " +
+        "where emd.id = :id and re.status = :status";
 
     final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -127,12 +133,14 @@ public class EventRepositoryImpl implements CustomEventRepository {
     }
 
     @Override
-    public List<RegularEventDTO> getRegularEventsBymId(Long id, Integer start, Integer end, Integer status) {
+    public List<RegularEventDTO> getRegularEventsBymId(Long id, Integer start, Integer end,
+                                                       Integer status, String orderTerm) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
         mapSqlParameterSource.addValue("status", status);
         mapSqlParameterSource.addValue("start", start);
         mapSqlParameterSource.addValue("end", end);
+        mapSqlParameterSource.addValue("orderTerm", orderTerm);
         return jdbcTemplate.query(GET_R_EVENT_DETAILS_BY_MID_STATUS,
             mapSqlParameterSource,
             new BeanPropertyRowMapper<>(RegularEventDTO.class)
@@ -140,15 +148,31 @@ public class EventRepositoryImpl implements CustomEventRepository {
     }
 
     @Override
-    public List<RegularEventDTO> getPagedREventListBymIdAndStatus(Long id, Integer status,  Integer start, Integer end) {
+    public List<RegularEventDTO> getPagedREventListBymIdAndStatus(Long id, Integer status,
+                                                                  Integer start, Integer end, String orderTerm) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
         mapSqlParameterSource.addValue("start", start);
         mapSqlParameterSource.addValue("end", end);
         mapSqlParameterSource.addValue("status", status);
-        return jdbcTemplate.query(GET_PAGED_REVENTS_BY_MID_AND_STATUS,
+        mapSqlParameterSource.addValue("orderTerm", orderTerm);
+        List<RegularEventDTO> a = jdbcTemplate.query(GET_PAGED_REVENTS_BY_MID_AND_STATUS,
             mapSqlParameterSource,
             new BeanPropertyRowMapper<>(RegularEventDTO.class)
+        );
+        a.sort((d1, d2) -> d2.getEndDate().compareTo(d1.getEndDate()));
+        return a;
+    }
+
+    @Override
+    public Integer getCountOfREventBymId(Long mId, Integer status) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("id", mId);
+        mapSqlParameterSource.addValue("status", status);
+        return jdbcTemplate.queryForObject(GET_COUNT_R_EVENT_BY_MID_STATUS,
+            mapSqlParameterSource,
+            (rs, rowNum) ->
+                rs.getInt("number")
         );
     }
 
