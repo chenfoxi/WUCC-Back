@@ -9,10 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wucc.backservice.model.dto.OnceEventDTO;
 import org.wucc.backservice.model.dto.RegularEventDTO;
 import org.wucc.backservice.model.dto.SimpleDTO;
-import org.wucc.backservice.repository.CustomEventRepository;
+import org.wucc.backservice.repository.custom.CustomEventRepository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.Collections;
 import java.util.List;
 
 /**

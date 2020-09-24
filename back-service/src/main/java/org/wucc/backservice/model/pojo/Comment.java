@@ -1,15 +1,11 @@
 package org.wucc.backservice.model.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -20,23 +16,34 @@ import java.sql.Timestamp;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Comment extends AbstractEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = true, insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = true, insertable = true, updatable = false)
     private User user;
 
     private Long postId, replyId;
 
-    private int commentType;
+    // 0-regular 1-once 2-blog
+    private Integer commentType;
 
+    @Lob
+    @Column(columnDefinition = "text")
     private String content;
 
     private Timestamp createTime, updateTime;
 
-
+    public Comment(User user, Long postId, Long replyId, Integer commentType,
+            String content, Timestamp createTime, Timestamp updateTime){
+        this.user = user;
+        this.postId = postId;
+        this.replyId = replyId;
+        this.commentType = commentType;
+        this.content = content;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
 }

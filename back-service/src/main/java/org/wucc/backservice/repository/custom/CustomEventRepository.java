@@ -1,4 +1,4 @@
-package org.wucc.backservice.repository;
+package org.wucc.backservice.repository.custom;
 
 import org.wucc.backservice.model.dto.OnceEventDTO;
 import org.wucc.backservice.model.dto.RegularEventDTO;

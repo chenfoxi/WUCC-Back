@@ -68,6 +68,11 @@ public class User {
         this.updateTime = new Timestamp(System.currentTimeMillis());
         this.createTime = new Timestamp(System.currentTimeMillis());
     }
+
+    public User (Long id){
+        this.id = id;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "user_roles",

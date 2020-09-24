@@ -6,14 +6,13 @@ import org.wucc.backservice.model.dto.OnceEventDTO;
 import org.wucc.backservice.model.dto.RegularEventDTO;
 import org.wucc.backservice.model.dto.RegularPageDTO;
 import org.wucc.backservice.model.dto.SimpleDTO;
-import org.wucc.backservice.model.pojo.OnceEvent;
-import org.wucc.backservice.model.pojo.User;
 import org.wucc.backservice.model.pojo.composite.OnceEventUserId;
 import org.wucc.backservice.model.pojo.composite.RegularEventUserId;
 import org.wucc.backservice.model.pojo.dict.Photo;
 import org.wucc.backservice.model.pojo.relationship.OnceEventRegister;
 import org.wucc.backservice.model.pojo.relationship.RegularEventRegister;
 import org.wucc.backservice.repository.*;
+import org.wucc.backservice.repository.custom.CustomEventRepository;
 import org.wucc.backservice.service.EventService;
 
 import java.sql.Timestamp;
