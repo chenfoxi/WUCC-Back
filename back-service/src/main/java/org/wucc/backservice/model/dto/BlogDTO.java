@@ -1,7 +1,9 @@
 package org.wucc.backservice.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -12,6 +14,8 @@ import java.sql.Timestamp;
  */
 
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BlogDTO extends SimpleDTO {
     Long userId;
@@ -21,9 +25,9 @@ public class BlogDTO extends SimpleDTO {
     String content;
     String excerpt;
     String imageUrl;
+    Integer postType;
     Integer auditStatus;
     Integer commentStatus;
     Timestamp updateTime;
     Timestamp createTime;
-
 }

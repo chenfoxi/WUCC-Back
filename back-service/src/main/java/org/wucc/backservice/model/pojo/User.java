@@ -83,17 +83,13 @@ public class User {
 
     @OneToMany(
         fetch = FetchType.LAZY,
-        mappedBy = "user",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
+        mappedBy = "user"
     )
     private Set<RegularEventRegister> regularEvents = new HashSet<>();
 
     @OneToMany(
         fetch = FetchType.LAZY,
-        mappedBy = "user",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
+        mappedBy = "user"
     )
     private Set<OnceEventRegister> onceEvents = new HashSet<>();
 

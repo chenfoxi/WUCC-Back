@@ -42,17 +42,17 @@ public class RegularEvent extends AbstractEntity {
     @Column(columnDefinition = "text")
     private String content;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-        mappedBy = "regularEvent", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+        mappedBy = "regularEvent")
     private Set<RegularEventPhoto> photos = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_meta_id")
     private EventMetaData metaDataForR;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-        mappedBy = "regularEvent", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+        mappedBy = "regularEvent" )
     private Set<RegularEventRegister> Users = new HashSet<>();
 
 }

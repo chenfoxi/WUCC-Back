@@ -39,8 +39,8 @@ public class EventMetaData extends AbstractEntity {
 
     private Timestamp updateTime, createTime;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
-        mappedBy = "metaDataForR", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY,
+        mappedBy = "metaDataForR" )
     private Set<RegularEvent> regularEventSet = new HashSet<>();
 
 }

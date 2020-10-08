@@ -23,6 +23,10 @@ public class DictType extends AbstractEntity {
 
     private String name;
 
-    //0-for tag; 1-for like; 2-for view
+    //0-for tag; 1-for like; 2-for view;
     private int type;
+
+    public DictType(Long id) {
+        super(id);
+    }
 }

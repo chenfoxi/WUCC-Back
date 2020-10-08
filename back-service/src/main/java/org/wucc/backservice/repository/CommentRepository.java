@@ -10,5 +10,4 @@ import org.wucc.backservice.model.pojo.Comment;
  */
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-
 }

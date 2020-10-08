@@ -5,17 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wucc.backservice.model.pojo.Blog;
+import org.wucc.backservice.model.pojo.composite.BlogCounterId;
 import org.wucc.backservice.model.pojo.composite.BlogTagId;
 import org.wucc.backservice.model.pojo.dict.DictType;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Objects;
 
 /**
- * Created by foxi.chen on 16/09/20.
+ * Created by foxi.chen on 7/10/20.
  *
  * @author foxi.chen
  */
@@ -24,10 +23,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BlogTag {
-
+public class BlogDict {
     @EmbeddedId
-    private BlogTagId blogTagId;
+    private BlogCounterId blogCounterId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,19 +34,20 @@ public class BlogTag {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id", nullable = true, insertable = false, updatable = false)
+    @JoinColumn(name = "dict_type_id", nullable = true, insertable = false, updatable = false)
     private DictType dictType;
+
+    private int value;
 
     private Timestamp createTime;
 
     private Timestamp updateTime;
 
-    public BlogTag(Long blogId, Long dictTypeId) {
+    public BlogDict(Long blogId, Long dictTypeId, int value){
         this.blog = new Blog(blogId);
         this.dictType = new DictType(dictTypeId);
-        this.blogTagId = new BlogTagId(blogId, dictTypeId);
-//        this.createTime = createTime;
-//        this.updateTime = updateTime;
+        this.blogCounterId = new BlogCounterId(blogId, dictTypeId);
+        this.value = value;
     }
 
     @Override
@@ -58,7 +57,7 @@ public class BlogTag {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        BlogTag that = (BlogTag) o;
+        BlogDict that = (BlogDict) o;
         return Objects.equals(blog.getId(), that.blog.getId()) &&
             Objects.equals(dictType.getId(), that.dictType.getId());
     }
@@ -67,5 +66,4 @@ public class BlogTag {
     public int hashCode() {
         return Objects.hash(blog, dictType);
     }
-
 }
